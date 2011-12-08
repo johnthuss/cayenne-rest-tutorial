@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultLockType" value="optimistic"/>
+	<property name="defaultPackage" value="org.apache.cayenne.tutorial.ws.model"/>
+	<property name="defaultSuperclass" value="org.apache.cayenne.tutorial.ws.model.RestDataObject"/>
+	<db-entity name="Other">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="number" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="thing_id" type="INTEGER" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="Thing">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="name" type="VARCHAR" isMandatory="true" length="50"/>
+	</db-entity>
+	<obj-entity name="Other" className="org.apache.cayenne.tutorial.ws.model.Other" lock-type="optimistic" dbEntityName="Other" superClassName="org.apache.cayenne.tutorial.ws.model.RestDataObject">
+		<obj-attribute name="number" type="java.lang.Integer" db-attribute-path="number"/>
+	</obj-entity>
+	<obj-entity name="Thing" className="org.apache.cayenne.tutorial.ws.model.Thing" lock-type="optimistic" dbEntityName="Thing" superClassName="org.apache.cayenne.tutorial.ws.model.RestDataObject">
+		<obj-attribute name="name" type="java.lang.String" lock="true" db-attribute-path="name"/>
+	</obj-entity>
+	<db-relationship name="thing" source="Other" target="Thing" toMany="false">
+		<db-attribute-pair source="thing_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="others" source="Thing" target="Other" toMany="true">
+		<db-attribute-pair source="id" target="thing_id"/>
+	</db-relationship>
+	<obj-relationship name="thing" source="Other" target="Thing" deleteRule="Nullify" db-relationship-path="thing"/>
+	<obj-relationship name="others" source="Thing" target="Other" deleteRule="Deny" db-relationship-path="others"/>
+</data-map>
